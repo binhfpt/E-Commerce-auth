@@ -84,13 +84,13 @@ namespace E_Commerce_auth.Controllers
             }
             return Ok(user);
         }
-        //[HttpGet("health")]
-        //public async Task<IActionResult> Health()
-        //{   
-        //    redisService.SetAsync("health_check", "ok", TimeSpan.FromMinutes(1));
+        [HttpGet("health")]
+        public async Task<IActionResult> Health()
+        {
+            //redisService.SetAsync("health_check", "ok", TimeSpan.FromMinutes(1));
 
-        //    return Ok(_configuration["jwt_secret_key"]);
-        //}
+            return Ok("Auth-Called");
+        }
         //[HttpGet("health2")]
         //public async Task<IActionResult> Health2()
         //{

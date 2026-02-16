@@ -1,9 +1,11 @@
 namespace E_Commerce_auth
 
 {
+    using E_Commerce_auth.Consul;
     using E_Commerce_auth.Models;
     using E_Commerce_auth.Repo;
     using E_Commerce_auth.Service;
+    using global::Consul;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Logging;
     using StackExchange.Redis;
@@ -28,8 +30,31 @@ namespace E_Commerce_auth
             );
             /////////////////////////////////////////////////////// Redis Configuration End ///////////////////////////////////////////////////
 
+
+
+
+            ////////////////////////////////////////////////////// Consul Configuration Begin /////////////////////////////////////////////////
+
+            builder.Services.AddHttpClient();
+
+            // Consul client (typed)
+            builder.Services.AddSingleton<IConsulClient>(_ =>
+            {
+                var consulAddr = builder.Configuration["Consul:Address"]!;
+                return new ConsulClient(c => c.Address = new Uri(consulAddr));
+            });
+
+            // Auto register/deregister
+            builder.Services.AddHostedService<ConsulCommunication>();
+
+            ////////////////////////////////////////////////////// Consul Configuration End ///////////////////////////////////////////////////
+
+
+
+
             /////////////////////////////////////////////////////// DI begin /////////////////////////////////////////////////////
-            
+
+
             builder.Services.AddScoped<AuthRepo>();
             builder.Services.AddScoped<AuthService>();
             builder.Services.AddScoped<TokenService>();
